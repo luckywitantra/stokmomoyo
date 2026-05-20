@@ -31,8 +31,8 @@
       "short_name": "Moy-STOK",
       "start_url": ".",
       "display": "standalone",
-      "background_color": "#111827",
-      "theme_color": "#FF2E2E",
+      "background_color": "#FFF9EB", // Warna Krem Momoyo
+      "theme_color": "#9A1622", // Warna Maroon Momoyo
       "icons": [{"src": APP_LOGO, "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}]
     };
     const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
@@ -49,15 +49,31 @@
 
   <style>
     :root { 
-      --primary: #FF2E2E; --bg: #F8F9FD; --text: #1E293B; --gray: #64748B; 
-      --card-bg: #FFFFFF; --border: #eeeeee; --input-bg: #fafafa; --radius: 16px; 
+      /* TEMA MOMOYO: MAROON & KREM */
+      --primary: #9A1622;   /* Merah Maroon */
+      --bg: #FFF9EB;        /* Krem Muda */
+      --text: #3E2723;      /* Cokelat Tua (Teks agar serasi dengan krem) */
+      --gray: #8D6E63;      /* Cokelat Muda / Abu */
+      --card-bg: #FFFFFF;   /* Putih bersih untuk Card */
+      --border: #F0E6D2;    /* Krem gelap untuk garis border */
+      --input-bg: #FCF4E1;  /* Krem lebih terang untuk input/background tombol */
+      --radius: 16px; 
     }
+    
     body.dark-mode { 
-      --bg: #0F172A; --text: #F8FAFC; --gray: #9CA3AF; 
-      --card-bg: #1E293B; --border: #334155; --input-bg: #0F172A;
+      --bg: #2D2424;        /* Cokelat gelap untuk Dark Mode */
+      --text: #FDF6E3;      /* Krem terang untuk Teks */
+      --gray: #BCAAA4;      /* Abu kecokelatan */
+      --card-bg: #3E2C2C;   /* Maroon gelap keabu-abuan untuk Card */
+      --border: #5D4037;    /* Cokelat pembatas */
+      --input-bg: #2D2424;
     }
 
     body { font-family: 'Urbanist', sans-serif; background: var(--bg); color: var(--text); padding-bottom: 90px; overflow-x: hidden; transition: background 0.3s, color 0.3s; }
+    
+    /* Override Bootstrap Primary Color with Momoyo Maroon */
+    .btn-primary, .bg-primary { background-color: var(--primary) !important; border-color: var(--primary) !important; color: #fff !important; }
+    .text-primary { color: var(--primary) !important; }
     
     button, .card-box, .nav-item, .fab, select, input { touch-action: manipulation; }
     .swal2-popup { will-change: transform, opacity; background: var(--card-bg) !important; color: var(--text) !important; }
@@ -99,8 +115,9 @@
     .history-btn { position: absolute; top: 15px; right: 15px; background: var(--input-bg); color: var(--gray); border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; z-index: 10; border: 1px solid var(--border); }
     #scrollArea { max-height: calc(100vh - 280px); overflow-y: auto; overflow-x: hidden; padding-bottom: 20px; }
     
-    .skeleton { background: #e2e5e7; background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0) 40px); background-size: 150px 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
-    body.dark-mode .skeleton { background: #374151; background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0) 40px); }
+    /* Warna loading kerangka menyesuaikan warna krem */
+    .skeleton { background: #E8D8C8; background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,0.5) 20px, rgba(255,255,255,0) 40px); background-size: 150px 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
+    body.dark-mode .skeleton { background: #4E342E; background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0) 40px); }
     @keyframes shimmer { 0% { background-position: -150px 0; } 100% { background-position: 100% 0; } }
     .skeleton-card { padding: 15px; background: var(--card-bg); border-radius: var(--radius); margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--border); }
     .sk-title { height: 20px; width: 70%; } .sk-big { height: 35px; width: 40%; }
@@ -108,27 +125,35 @@
 </head>
 <body>
 
-  <div id="loginScreen" style="position:fixed; inset:0; background:#111827; z-index:10000; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+  <!-- Layar Login diubah ke warna latar krem (var(--bg)) dan teks cokelat tua -->
+  <div id="loginScreen" style="position:fixed; inset:0; background:var(--bg); z-index:10000; display:flex; flex-direction:column; align-items:center; justify-content:center;">
     <div class="text-center mb-5">
-        <div style="height:80px; width:80px; background:white; border-radius:24px; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; overflow:hidden;">
+        <div style="height:80px; width:80px; background:white; border-radius:24px; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; overflow:hidden; box-shadow: 0 4px 12px rgba(154, 22, 34, 0.15);">
             <img id="loginLogoImg" src="" style="width:100%; height:100%; object-fit:contain;" alt="Logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2890/2890580.png'">
         </div>
-        <h1 class="text-white fw-bolder" id="loginTitleApp">APP V33</h1>
-        <p id="loginStatus" class="text-secondary small mt-1">Super App Initializing...</p>
+        <h1 style="color:var(--primary);" class="fw-bolder" id="loginTitleApp">APP V33</h1>
+        <p id="loginStatus" class="small mt-1" style="color:var(--gray);">Super App Initializing...</p>
     </div>
-    <div class="d-flex gap-3 mb-5" id="pinIndicators"><div class="pin-dot" style="width:16px; height:16px; border-radius:50%; border:2px solid #4B5563;"></div><div class="pin-dot" style="width:16px; height:16px; border-radius:50%; border:2px solid #4B5563;"></div><div class="pin-dot" style="width:16px; height:16px; border-radius:50%; border:2px solid #4B5563;"></div><div class="pin-dot" style="width:16px; height:16px; border-radius:50%; border:2px solid #4B5563;"></div></div>
+    <div class="d-flex gap-3 mb-5" id="pinIndicators">
+        <div class="pin-dot" style="width:16px; height:16px; border-radius:50%; border:2px solid var(--primary);"></div>
+        <div class="pin-dot" style="width:16px; height:16px; border-radius:50%; border:2px solid var(--primary);"></div>
+        <div class="pin-dot" style="width:16px; height:16px; border-radius:50%; border:2px solid var(--primary);"></div>
+        <div class="pin-dot" style="width:16px; height:16px; border-radius:50%; border:2px solid var(--primary);"></div>
+    </div>
     <div id="numpad" class="row g-4" style="max-width:280px; opacity:0.5; pointer-events:none;">
-      <div class="col-4 d-flex justify-content-center" onclick="enterPin('1')"><button class="btn btn-dark rounded-circle" style="width:70px; height:70px; font-size:1.5rem;">1</button></div>
-      <div class="col-4 d-flex justify-content-center" onclick="enterPin('2')"><button class="btn btn-dark rounded-circle" style="width:70px; height:70px; font-size:1.5rem;">2</button></div>
-      <div class="col-4 d-flex justify-content-center" onclick="enterPin('3')"><button class="btn btn-dark rounded-circle" style="width:70px; height:70px; font-size:1.5rem;">3</button></div>
-      <div class="col-4 d-flex justify-content-center" onclick="enterPin('4')"><button class="btn btn-dark rounded-circle" style="width:70px; height:70px; font-size:1.5rem;">4</button></div>
-      <div class="col-4 d-flex justify-content-center" onclick="enterPin('5')"><button class="btn btn-dark rounded-circle" style="width:70px; height:70px; font-size:1.5rem;">5</button></div>
-      <div class="col-4 d-flex justify-content-center" onclick="enterPin('6')"><button class="btn btn-dark rounded-circle" style="width:70px; height:70px; font-size:1.5rem;">6</button></div>
-      <div class="col-4 d-flex justify-content-center" onclick="enterPin('7')"><button class="btn btn-dark rounded-circle" style="width:70px; height:70px; font-size:1.5rem;">7</button></div>
-      <div class="col-4 d-flex justify-content-center" onclick="enterPin('8')"><button class="btn btn-dark rounded-circle" style="width:70px; height:70px; font-size:1.5rem;">8</button></div>
-      <div class="col-4 d-flex justify-content-center" onclick="enterPin('9')"><button class="btn btn-dark rounded-circle" style="width:70px; height:70px; font-size:1.5rem;">9</button></div>
-      <div class="col-4"></div><div class="col-4 d-flex justify-content-center" onclick="enterPin('0')"><button class="btn btn-dark rounded-circle" style="width:70px; height:70px; font-size:1.5rem;">0</button></div>
-      <div class="col-4 d-flex justify-content-center" onclick="deletePin()"><button class="btn btn-transparent text-secondary fs-3"><i class="bi bi-backspace-fill"></i></button></div>
+      <!-- Tombol numpad disesuaikan warna krem/putih dengan border maroon -->
+      <div class="col-4 d-flex justify-content-center" onclick="enterPin('1')"><button class="btn rounded-circle fw-bold" style="background:var(--card-bg); color:var(--text); border:1px solid var(--border); width:70px; height:70px; font-size:1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">1</button></div>
+      <div class="col-4 d-flex justify-content-center" onclick="enterPin('2')"><button class="btn rounded-circle fw-bold" style="background:var(--card-bg); color:var(--text); border:1px solid var(--border); width:70px; height:70px; font-size:1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">2</button></div>
+      <div class="col-4 d-flex justify-content-center" onclick="enterPin('3')"><button class="btn rounded-circle fw-bold" style="background:var(--card-bg); color:var(--text); border:1px solid var(--border); width:70px; height:70px; font-size:1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">3</button></div>
+      <div class="col-4 d-flex justify-content-center" onclick="enterPin('4')"><button class="btn rounded-circle fw-bold" style="background:var(--card-bg); color:var(--text); border:1px solid var(--border); width:70px; height:70px; font-size:1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">4</button></div>
+      <div class="col-4 d-flex justify-content-center" onclick="enterPin('5')"><button class="btn rounded-circle fw-bold" style="background:var(--card-bg); color:var(--text); border:1px solid var(--border); width:70px; height:70px; font-size:1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">5</button></div>
+      <div class="col-4 d-flex justify-content-center" onclick="enterPin('6')"><button class="btn rounded-circle fw-bold" style="background:var(--card-bg); color:var(--text); border:1px solid var(--border); width:70px; height:70px; font-size:1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">6</button></div>
+      <div class="col-4 d-flex justify-content-center" onclick="enterPin('7')"><button class="btn rounded-circle fw-bold" style="background:var(--card-bg); color:var(--text); border:1px solid var(--border); width:70px; height:70px; font-size:1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">7</button></div>
+      <div class="col-4 d-flex justify-content-center" onclick="enterPin('8')"><button class="btn rounded-circle fw-bold" style="background:var(--card-bg); color:var(--text); border:1px solid var(--border); width:70px; height:70px; font-size:1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">8</button></div>
+      <div class="col-4 d-flex justify-content-center" onclick="enterPin('9')"><button class="btn rounded-circle fw-bold" style="background:var(--card-bg); color:var(--text); border:1px solid var(--border); width:70px; height:70px; font-size:1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">9</button></div>
+      <div class="col-4"></div>
+      <div class="col-4 d-flex justify-content-center" onclick="enterPin('0')"><button class="btn rounded-circle fw-bold" style="background:var(--card-bg); color:var(--text); border:1px solid var(--border); width:70px; height:70px; font-size:1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">0</button></div>
+      <div class="col-4 d-flex justify-content-center" onclick="deletePin()"><button class="btn btn-transparent fs-3" style="color:var(--primary)"><i class="bi bi-backspace-fill"></i></button></div>
     </div>
   </div>
 
@@ -149,7 +174,7 @@
       <div class="skeleton-card"><div class="skeleton sk-title"></div><div class="skeleton sk-big"></div></div>
   </div>
 
-  <div id="syncBadge" class="sync-badge" style="display:none;">
+  <div id="syncBadge" class="sync-badge" style="display:none; justify-content:space-between; align-items:center; background:var(--card-bg); padding:10px 20px; border-bottom:1px solid var(--border);">
     <div><i class="bi bi-cloud-arrow-up-fill text-warning me-1"></i><span class="fw-bold text-dark" id="queueCount">0 Antrean</span></div>
     <button class="btn btn-sm btn-warning fw-bold text-white rounded-pill px-3" onclick="syncOfflineData()">Sync</button>
   </div>
@@ -183,7 +208,7 @@
 
     <div class="px-3" id="page-transfer" style="display:none; height:calc(100vh - 220px); overflow-y:auto;">
       <div class="card-box" style="border-top: 4px solid var(--primary);">
-        <h6 class="fw-bold mb-4 text-danger"><i class="bi bi-send-fill me-2"></i>KIRIM BARANG</h6>
+        <h6 class="fw-bold mb-4" style="color:var(--primary)"><i class="bi bi-send-fill me-2"></i>KIRIM BARANG</h6>
         <div class="mb-3"><label class="inp-lbl">TUJUAN</label><select id="trfDest" class="inp-field"></select></div>
         <div class="mb-3">
            <label class="inp-lbl">PILIH BARANG</label><select id="trfItem" class="inp-field" onchange="updTrfLbl()"></select>
@@ -206,8 +231,9 @@
         <div class="col-4"><div class="card-box text-center py-2 mb-0 border border-warning shadow-sm" onclick="showStatDetails('over')"><h5 id="qs-over" class="mb-0 fw-bolder text-warning">0</h5><small style="font-size:0.6rem; font-weight:700;" class="text-secondary">OVERSTOK</small></div></div>
     </div>
     <div class="row g-2 mb-3">
-        <div class="col-6"><div class="card-box bg-dark text-white text-center py-3 mb-0 border-0 h-100 d-flex flex-column justify-content-center"><small style="opacity:0.9; font-weight:700; font-size:0.6rem;">HPP HARIAN (EST)</small><h5 id="hppVal" style="margin:2px 0 0 0; font-weight:800; font-size:1.1rem; color:#6EE7B7;">Rp 0</h5></div></div>
-        <div class="col-6"><div class="card-box bg-danger text-white text-center py-3 mb-0 border-0 h-100 d-flex flex-column justify-content-center"><small style="opacity:0.9; font-weight:700; font-size:0.6rem;">COST OF WASTE</small><h5 id="wasteVal" style="margin:2px 0 0 0; font-weight:800; font-size:1.1rem;">Rp 0</h5></div></div>
+        <!-- Dashboard Owner dengan warna Maroon Momoyo -->
+        <div class="col-6"><div class="card-box text-white text-center py-3 mb-0 border-0 h-100 d-flex flex-column justify-content-center" style="background-color: #3E2723;"><small style="opacity:0.9; font-weight:700; font-size:0.6rem;">HPP HARIAN (EST)</small><h5 id="hppVal" style="margin:2px 0 0 0; font-weight:800; font-size:1.1rem; color:#F0E6D2;">Rp 0</h5></div></div>
+        <div class="col-6"><div class="card-box text-white text-center py-3 mb-0 border-0 h-100 d-flex flex-column justify-content-center" style="background-color: var(--primary);"><small style="opacity:0.9; font-weight:700; font-size:0.6rem;">COST OF WASTE</small><h5 id="wasteVal" style="margin:2px 0 0 0; font-weight:800; font-size:1.1rem;">Rp 0</h5></div></div>
     </div>
 
     <div class="d-flex gap-2 mb-3" style="overflow-x:auto; padding-bottom:5px;">
@@ -275,9 +301,10 @@
     
     const toIDR=(n)=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n);
 
-    localforage.config({ name:'AiCHA_DB', storeName:'aicha_store' });
+    // Diubah nama storage lokalnya agar identik dengan Momoyo (mencegah bentrok dengan app sebelumnya)
+    localforage.config({ name:'MOMOYO_DB', storeName:'moy_store' });
 
-    // --- PWA INSTALLATION LOGIC (POPUP EDITION) ---
+    // --- PWA INSTALLATION LOGIC ---
     const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
     const isStandalone = () => ('standalone' in window.navigator) && window.navigator.standalone;
 
@@ -286,7 +313,6 @@
         deferredPrompt = e; 
         document.getElementById('headerInstallBtn').classList.remove('d-none');
         
-        // Show Popup nicely after 3 seconds if not dismissed previously
         if(!localStorage.getItem('hideInstallPopup')) {
             setTimeout(showInstallPopup, 3000);
         }
@@ -300,8 +326,8 @@
                 imageUrl: APP_LOGO,
                 imageWidth: 80,
                 showCancelButton: true,
-                confirmButtonColor: '#FF2E2E',
-                cancelButtonColor: '#64748B',
+                confirmButtonColor: '#9A1622', // Warna Maroon SweetAlert Momoyo
+                cancelButtonColor: '#8D6E63',
                 confirmButtonText: 'Instal Sekarang',
                 cancelButtonText: 'Nanti Saja'
             }).then((result) => {
@@ -318,13 +344,12 @@
                 html: `<div class="small text-start mt-2" style="color:var(--text)">Untuk menginstal aplikasi ini ke layar utama iPhone Anda:<br><br>1. Tekan tombol <b>Share</b> <i class="bi bi-box-arrow-up border rounded p-1"></i> di menu bawah Safari.<br><br>2. Geser ke atas dan pilih <b>"Add to Home Screen"</b> <i class="bi bi-plus-square border rounded p-1"></i>.</div>`,
                 imageUrl: APP_LOGO,
                 imageWidth: 80,
-                confirmButtonColor: '#FF2E2E',
+                confirmButtonColor: '#9A1622',
                 confirmButtonText: 'Mengerti'
             });
         }
     }
     
-    // Fallback for iOS button
     if (isIos() && !isStandalone()) {
         document.getElementById('headerInstallBtn').classList.remove('d-none');
         if(!localStorage.getItem('hideInstallPopup')) setTimeout(showInstallPopup, 3000);
@@ -347,17 +372,17 @@
     function toggleTheme() {
         let isDark = document.body.classList.contains('dark-mode');
         let newTheme = isDark ? 'light' : 'dark';
-        localStorage.setItem('aicha_theme', newTheme);
+        localStorage.setItem('moy_theme', newTheme);
         applyTheme(newTheme);
     }
 
     document.addEventListener("DOMContentLoaded", async () => { 
-        let savedTheme = localStorage.getItem('aicha_theme') || 'auto';
+        let savedTheme = localStorage.getItem('moy_theme') || 'auto';
         applyTheme(savedTheme);
 
-        opnameQueue = (await localforage.getItem('qAicha33')) || [];
-        activeUser = (await localforage.getItem('uAicha33')) || null;
-        let cache = await localforage.getItem('dAicha33');
+        opnameQueue = (await localforage.getItem('qMoy33')) || [];
+        activeUser = (await localforage.getItem('uMoy33')) || null;
+        let cache = await localforage.getItem('dMoy33');
         
         showSkeletonLoader();
         if(cache) { globalData = cache; enableLogin(); }
@@ -366,7 +391,7 @@
           const res = await fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: "getInitialData", outlet: "ALL" }) });
           const result = await res.json();
           if(result.status === "success") { 
-              globalData = result.data; await localforage.setItem('dAicha33', globalData); 
+              globalData = result.data; await localforage.setItem('dMoy33', globalData); 
               document.getElementById('loginStatus').textContent = "Sistem Keamanan Aktif";
               enableLogin(); if(activeUser) showMainApp(); 
           }
@@ -378,14 +403,14 @@
 
     function enterPin(n) { if(currentPin.length < 4) { currentPin += n; updatePinUI(); if(currentPin.length===4) validatePin(); } }
     function deletePin() { if(currentPin.length > 0) { currentPin = currentPin.slice(0, -1); updatePinUI(); } }
-    function updatePinUI() { document.querySelectorAll('.pin-dot').forEach((d, i) => d.style.background = i < currentPin.length ? 'white' : 'transparent'); }
+    function updatePinUI() { document.querySelectorAll('.pin-dot').forEach((d, i) => { d.style.background = i < currentPin.length ? 'var(--primary)' : 'transparent'; }); }
     async function validatePin() {
         const u = globalData.users.find(u => u.pin === currentPin);
-        if(u) { activeUser = u; await localforage.setItem('uAicha33', u); showMainApp(); }
-        else { Swal.fire('PIN Salah','','error'); currentPin = ""; updatePinUI(); }
+        if(u) { activeUser = u; await localforage.setItem('uMoy33', u); showMainApp(); }
+        else { Swal.fire({title:'PIN Salah', icon:'error', confirmButtonColor: '#9A1622'}); currentPin = ""; updatePinUI(); }
     }
     function enableLogin() { document.getElementById('numpad').style.opacity = 1; document.getElementById('numpad').style.pointerEvents = 'auto'; if(activeUser) showMainApp(); }
-    async function doLogout() { activeUser = null; currentPin = ""; window.hasShownFocus = false; await localforage.removeItem('uAicha33'); updatePinUI(); document.getElementById('loginScreen').style.display='flex'; }
+    async function doLogout() { activeUser = null; currentPin = ""; window.hasShownFocus = false; await localforage.removeItem('uMoy33'); updatePinUI(); document.getElementById('loginScreen').style.display='flex'; }
     window.doLogout = doLogout;
 
     function showMainApp() {
@@ -412,7 +437,7 @@
         if(result.status === "success") { 
             globalData = result.data; renderStockList(); 
             if(activeUser && activeUser.role === "Owner") { renderOwner(); renderPO(); renderMasterList(); }
-        } else { Swal.fire('Error', result.message, 'warning'); renderStockList(); }
+        } else { Swal.fire({title:'Error', text:result.message, icon:'warning', confirmButtonColor: '#9A1622'}); renderStockList(); }
       } catch (e) { renderStockList(); }
     }
 
@@ -448,7 +473,8 @@
         let max = Math.max(...arr) || 1; let min = Math.min(...arr); let range = max - min || 1;
         let w = 60; let h = 20; let step = w / (arr.length - 1);
         let pts = arr.map((val, i) => `${i * step},${h - (((val - min) / range) * (h-4)) - 2}`);
-        return `<svg width="${w}" height="${h}" style="overflow:visible;"><polyline points="${pts.join(' ')}" fill="none" stroke="#FF2E2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        // Warna maroon line chart
+        return `<svg width="${w}" height="${h}" style="overflow:visible;"><polyline points="${pts.join(' ')}" fill="none" stroke="#9A1622" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
     }
 
     function renderStockList() {
@@ -505,7 +531,7 @@
                     <div class="d-flex align-items-center hide-compact">${updatedToday ? '<i class="bi bi-check-circle-fill text-success fs-5"></i>' : ''}</div>
                 </div>
                 <div class="d-flex justify-content-between align-items-end">
-                    <div class="text-danger fw-bold fs-4 my-1">${currentQty}</div>
+                    <div class="fw-bold fs-4 my-1" style="color:var(--primary);">${currentQty}</div>
                     <div class="hide-compact">${sparkline}</div>
                 </div>
                 <div class="d-flex justify-content-between small text-secondary hide-compact">
@@ -567,7 +593,7 @@
             <div class="text-start">
                 <label class="inp-lbl">Pilih Nama Barang</label>
                 <select id="rcv-name" class="inp-field mb-3" onchange="updateRcvInfo()">${options}</select>
-                <div id="rcv-info" class="small fw-bold text-primary mb-2 text-center p-2 rounded border" style="background:var(--input-bg);"></div>
+                <div id="rcv-info" class="small fw-bold mb-2 text-center p-2 rounded border" style="color:var(--primary); background:var(--input-bg);"></div>
                 <div class="dual-input">
                     <div class="inp-grp"><label class="inp-lbl">Qty Besar</label><input id="rcv-q1" type="number" class="inp-field" placeholder="0"></div>
                     <div class="inp-grp"><label class="inp-lbl">Qty Kecil</label><input id="rcv-q2" type="number" class="inp-field" placeholder="0"></div>
@@ -575,7 +601,7 @@
                 <label class="inp-lbl">Tanggal Expired di Dus (Opsional)</label>
                 <input id="rcv-exp" type="date" class="inp-field">
             </div>`,
-            confirmButtonColor: '#FF2E2E', confirmButtonText: 'Terima Barang',
+            confirmButtonColor: '#9A1622', confirmButtonText: 'Terima Barang',
             didOpen: () => { window.updateRcvInfo(); },
             preConfirm: () => {
                 let name = document.getElementById('rcv-name').value; let p = globalData.products.find(x => x.name === name);
@@ -633,15 +659,15 @@
             });
         }
         let adu = globalData.inventoryStats[`${out}_${itemName}`]?.adu || '-'; let est = lItem ? (lItem.daysLeft === 999?"Aman":lItem.daysLeft) : '-';
-        let html = `<div class="text-start"><div class="mb-3">${chartHtml}</div><div class="row text-center mb-3"><div class="col-6"><div class="border rounded p-2"><div class="small text-muted">Pemakaian (ADU)</div><div class="fw-bold text-primary">${adu} / hr</div></div></div><div class="col-6"><div class="border rounded p-2"><div class="small text-muted">Est. Habis</div><div class="fw-bold text-danger">${est} hr</div></div></div></div><h6 class="fw-bold mb-2" style="color:var(--text)">Rincian Batch / Expired:</h6><div class="p-2 mb-3 border" style="background:var(--input-bg); border-radius:8px;">${expHtml || '<div class="text-muted small">Belum ada data stok.</div>'}</div></div>`;
+        let html = `<div class="text-start"><div class="mb-3">${chartHtml}</div><div class="row text-center mb-3"><div class="col-6"><div class="border rounded p-2"><div class="small text-muted">Pemakaian (ADU)</div><div class="fw-bold" style="color:var(--primary)">${adu} / hr</div></div></div><div class="col-6"><div class="border rounded p-2"><div class="small text-muted">Est. Habis</div><div class="fw-bold text-danger">${est} hr</div></div></div></div><h6 class="fw-bold mb-2" style="color:var(--text)">Rincian Batch / Expired:</h6><div class="p-2 mb-3 border" style="background:var(--input-bg); border-radius:8px;">${expHtml || '<div class="text-muted small">Belum ada data stok.</div>'}</div></div>`;
 
         Swal.fire({
-            title: `<div class="fs-5 fw-bold text-start" style="color:var(--text)">${itemName}</div>`, html: html, showCancelButton: true, showDenyButton: true, confirmButtonColor: '#FF2E2E', cancelButtonColor: '#64748B', denyButtonColor: '#1E293B', confirmButtonText: '<i class="bi bi-pencil-square"></i> Input Opname', denyButtonText: '<i class="bi bi-clock-history"></i> Riwayat', cancelButtonText: 'Tutup',
+            title: `<div class="fs-5 fw-bold text-start" style="color:var(--text)">${itemName}</div>`, html: html, showCancelButton: true, showDenyButton: true, confirmButtonColor: '#9A1622', cancelButtonColor: '#8D6E63', denyButtonColor: '#3E2C2C', confirmButtonText: '<i class="bi bi-pencil-square"></i> Input Opname', denyButtonText: '<i class="bi bi-clock-history"></i> Riwayat', cancelButtonText: 'Tutup',
             didOpen: () => {
                 if(lItem && lItem.history && lItem.history.length > 0) {
                     let ctx = document.getElementById('detailChart').getContext('2d');
                     let chartData = lItem.history.slice().reverse(); let labels = chartData.map(h => { let d = new Date(h.date); return d.getDate() + '/' + (d.getMonth()+1); }); let dataPoints = chartData.map(h => h.qtyBase / lItem.isi); 
-                    new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Tren Stok ('+lItem.uMain+')', data: dataPoints, borderColor: '#FF2E2E', backgroundColor: 'rgba(255, 46, 46, 0.1)', fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } } });
+                    new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Tren Stok ('+lItem.uMain+')', data: dataPoints, borderColor: '#9A1622', backgroundColor: 'rgba(154, 22, 34, 0.1)', fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } } });
                 }
             }
         }).then((result) => { if (result.isConfirmed) { setTimeout(() => openOpnameModal(itemName), 300); } else if (result.isDenied) { setTimeout(() => showHistory(itemName), 300); } });
@@ -668,7 +694,7 @@
             histHTML += `<div class="border-bottom py-2"><div class="d-flex justify-content-between fw-bold" style="color:var(--text)"><span>${dateStr}</span><span class="${color}">${sign}${qtyStr} ${undoHtml}</span></div><div class="text-muted d-flex justify-content-between"><span>${h.type}</span><span>${h.user}</span></div></div>`; 
         }); 
         histHTML += `</div>`; 
-        Swal.fire({ title: `<div style="font-size:1.1rem; color:#E31E24; font-weight:bold;">Riwayat ${itemName}</div>`, html: histHTML, confirmButtonColor: '#1E293B', confirmButtonText: 'Tutup' }); 
+        Swal.fire({ title: `<div style="font-size:1.1rem; color:var(--primary); font-weight:bold;">Riwayat ${itemName}</div>`, html: histHTML, confirmButtonColor: '#3E2C2C', confirmButtonText: 'Tutup' }); 
     }
 
     // --- AUTO-FILL STOCK OPNAME ---
@@ -714,19 +740,19 @@
     }
 
     window.undoLocal = async function(barang, outlet) {
-      if(await Swal.fire({title:'Batalkan Antrean?', text:'Hapus dari memori offline.', icon:'warning', showCancelButton:true, confirmButtonColor:'#FF2E2E'}).then(r=>r.isConfirmed)) {
+      if(await Swal.fire({title:'Batalkan Antrean?', text:'Hapus dari memori offline.', icon:'warning', showCancelButton:true, confirmButtonColor:'#9A1622'}).then(r=>r.isConfirmed)) {
          opnameQueue = opnameQueue.filter(q => !(q.barangId === barang && q.outletId === outlet));
-         await localforage.setItem('qAicha33', opnameQueue); updateQueueUI(); renderStockList();
+         await localforage.setItem('qMoy33', opnameQueue); updateQueueUI(); renderStockList();
       }
     }
     window.delStock = async function(id) { 
-      if(await Swal.fire({title:'Batalkan Input?', icon:'warning', showCancelButton:true, confirmButtonColor:'#FF2E2E'}).then(r=>r.isConfirmed)) { 
+      if(await Swal.fire({title:'Batalkan Input?', icon:'warning', showCancelButton:true, confirmButtonColor:'#9A1622'}).then(r=>r.isConfirmed)) { 
         showSkeletonLoader(); fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: "deleteStock", data: {rowIndex: id, user: activeUser.username} }) }).then(()=>fetchData()); 
       } 
     }
 
-    async function submitSingle(payload) { showSkeletonLoader(); try { let res = await fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: "submitOpnameBatch", data: [payload] }) }); let result = await res.json(); if(result.status !== "success") throw new Error(result.message); fetchData(); } catch (e) { opnameQueue.push(payload); await localforage.setItem('qAicha33', opnameQueue); updateQueueUI(); renderStockList(); Swal.fire('Tersimpan Offline','Akan dikirim otomatis saat sinyal bagus','info'); } }
-    async function syncOfflineData() { if(!navigator.onLine || opnameQueue.length === 0) return; showSkeletonLoader(); try { await fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: "submitOpnameBatch", data: opnameQueue }) }); opnameQueue = []; await localforage.setItem('qAicha33', []); updateQueueUI(); fetchData(); Swal.fire({toast:true, position:'top', icon:'success', title:'Sinkronisasi Berhasil', showConfirmButton:false, timer:1500}); } catch(e) { renderStockList(); } }
+    async function submitSingle(payload) { showSkeletonLoader(); try { let res = await fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: "submitOpnameBatch", data: [payload] }) }); let result = await res.json(); if(result.status !== "success") throw new Error(result.message); fetchData(); } catch (e) { opnameQueue.push(payload); await localforage.setItem('qMoy33', opnameQueue); updateQueueUI(); renderStockList(); Swal.fire({title:'Tersimpan Offline', text:'Akan dikirim otomatis saat sinyal bagus', icon:'info', confirmButtonColor: '#9A1622'}); } }
+    async function syncOfflineData() { if(!navigator.onLine || opnameQueue.length === 0) return; showSkeletonLoader(); try { await fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: "submitOpnameBatch", data: opnameQueue }) }); opnameQueue = []; await localforage.setItem('qMoy33', []); updateQueueUI(); fetchData(); Swal.fire({toast:true, position:'top', icon:'success', title:'Sinkronisasi Berhasil', showConfirmButton:false, timer:1500}); } catch(e) { renderStockList(); } }
     function updateQueueUI() { document.getElementById('syncBadge').style.display = opnameQueue.length > 0 ? 'flex' : 'none'; document.getElementById('queueCount').innerText = `${opnameQueue.length} Antrean`; }
     
     // --- Laporan WA PWA Konsolidasi & Rekap ---
@@ -734,7 +760,7 @@
       let out = document.getElementById('outlet').value; let tgl = new Date().toLocaleDateString('id-ID', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
       let totHPP = globalData.hppPerOutlet ? (globalData.hppPerOutlet[out] || 0) : 0; let totWaste = globalData.wastePerOutlet ? (globalData.wastePerOutlet[out] || 0) : 0; let totLoss = globalData.expiredAssetPerOutlet ? (globalData.expiredAssetPerOutlet[out] || 0) : 0;
       
-      let txt = `📋 *LAPORAN OPNAME AI-CHA ${out.toUpperCase()}*\n📅 ${tgl}\n👤 Petugas: ${activeUser.username}\n\n`;
+      let txt = `📋 *LAPORAN OPNAME MOMOYO ${out.toUpperCase()}*\n📅 ${tgl}\n👤 Petugas: ${activeUser.username}\n\n`;
       txt += `📊 *RINGKASAN EKSEKUTIF*\n💰 Estimasi HPP: *${toIDR(totHPP)}*\n🗑️ Kerugian (Waste): *${toIDR(totWaste + totLoss)}*\n\n📦 *RINCIAN STOK BARANG:*\n`;
       
       let sortedProducts = [...globalData.products].sort((a,b) => a.name.localeCompare(b.name));
@@ -757,13 +783,13 @@
            allItemsStr += `   └ ADU: ${adu}/hr | Est: ${lItem.daysLeft === 999 ? "Aman" : lItem.daysLeft + " hr"}\n\n`; 
         } else { allItemsStr += `➖ *${p.name}* 🔴\n   └ Stok: *KOSONG*\n\n`; }
       });
-      txt += allItemsStr + `_Ket: ✅ Aman | 📉 Kritis | 📈 Over | ⚠️ Dekat Exp | ⛔ Expired | 🔴 Kosong_\n\n_Generated via V33.0 Enterprise_`;
+      txt += allItemsStr + `_Ket: ✅ Aman | 📉 Kritis | 📈 Over | ⚠️ Dekat Exp | ⛔ Expired | 🔴 Kosong_\n\n_Generated via Moy-STOK V33.0_`;
       navigator.clipboard.writeText(txt).then(() => Swal.fire({toast:true, position:'top', icon:'success', title:'Laporan Tersalin!', showConfirmButton:false, timer:2000}));
     }
     
     window.copyKonsolidasiWA = function() {
         let tgl = new Date().toLocaleDateString('id-ID', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
-        let txt = `🏢 *LAPORAN KONSOLIDASI AI-CHA*\n📅 ${tgl}\n\n`;
+        let txt = `🏢 *LAPORAN KONSOLIDASI MOMOYO*\n📅 ${tgl}\n\n`;
         let sortedProducts = [...globalData.products].sort((a,b) => a.name.localeCompare(b.name));
         let targetOutlets = globalData.outlets.filter(o => o.id !== "ALL");
         
@@ -781,7 +807,7 @@
             });
             txt += `➖ *${p.name}*\n${detailStr}\n`;
         });
-        txt += `_Generated via V33.0 Enterprise_`;
+        txt += `_Generated via Moy-STOK V33.0_`;
         navigator.clipboard.writeText(txt).then(() => Swal.fire({toast:true, position:'top', icon:'success', title:'Laporan Konsolidasi Tersalin!', showConfirmButton:false, timer:3000}));
     }
 
@@ -809,13 +835,13 @@
     }
     
     function renderMasterList() { let h=''; globalData.products.forEach(b => { h+=`<div class="card-box p-3"><div class="d-flex justify-content-between align-items-center"><div><div class="fw-bold" style="font-size:0.9rem; color:var(--text)">${b.name}</div><div class="small text-secondary mt-1">1 ${b.uMain} = ${b.isi} ${b.uSub}</div></div><div class="d-flex gap-1"><button onclick="openMasterModal('${b.name}', '${b.uMain}', '${b.pMain}', '${b.isi}', '${b.uSub}', '${b.pSub}', ${b.hasExpiry})" class="btn btn-sm border" style="background:var(--input-bg)"><i class="bi bi-pencil-fill text-primary"></i></button><button onclick="deleteMasterItem('${b.name}')" class="btn btn-sm border" style="background:var(--input-bg)"><i class="bi bi-trash-fill text-danger"></i></button></div></div></div>`; }); document.getElementById('masterList').innerHTML = h; }
-    window.deleteMasterItem = function(nama) { Swal.fire({ title: 'Hapus Item?', text: `Anda yakin ingin menghapus ${nama}?`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33' }).then(r => { if(r.isConfirmed) { showSkeletonLoader(); fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: "deleteMasterBarang", data: { nama: nama, user: activeUser.username } }) }).then(()=>fetchData()); } }); }
+    window.deleteMasterItem = function(nama) { Swal.fire({ title: 'Hapus Item?', text: `Anda yakin ingin menghapus ${nama}?`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#9A1622' }).then(r => { if(r.isConfirmed) { showSkeletonLoader(); fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: "deleteMasterBarang", data: { nama: nama, user: activeUser.username } }) }).then(()=>fetchData()); } }); }
     function openMasterModal(nm="", uM="", pM="", isi="", uS="", pS="", hasExp=true) { 
         let chk = hasExp ? "checked" : ""; 
         Swal.fire({ 
             title: nm ? 'Edit Barang' : 'Barang Baru', 
             html:`<div style="text-align:left;"><label class="inp-lbl">Nama Barang</label><input id="mNama" class="inp-field mb-2" value="${nm}"><div class="p-2 mb-2 rounded border" style="background:var(--input-bg)"><div class="dual-input mb-2"><div class="inp-grp"><label class="inp-lbl">Satuan Besar</label><input id="muMain" class="inp-field" value="${uM}" onkeyup="updateMasterLabel()"></div><div class="inp-grp"><label class="inp-lbl">Harga (Per Besar)</label><input id="mpMain" type="number" class="inp-field" value="${pM}" onkeyup="calcMaster()"></div></div><div class="inp-grp"><label class="inp-lbl text-primary">Isi per <span id="lbl-big">Dus</span></label><input id="mIsi" type="number" class="inp-field border-primary" value="${isi}" onkeyup="calcMaster()"></div></div><div class="dual-input"><div class="inp-grp"><label class="inp-lbl">Satuan Kecil</label><input id="muSub" class="inp-field" value="${uS}"></div><div class="inp-grp"><label class="inp-lbl text-success">Harga (Per Kecil)</label><input id="mpSub" type="number" class="inp-field bg-white" value="${pS}" readonly><div class="calc-badge mt-1" id="mCalcBadge">Auto-Calc</div></div></div><div class="form-check form-switch mt-3"><input class="form-check-input" type="checkbox" id="mExp" ${chk}><label class="form-check-label fw-bold small" style="color:var(--text)" for="mExp">Barang Memiliki Kadaluwarsa</label></div></div>`, 
-            confirmButtonColor:'#FF2E2E', showCancelButton:true, didOpen: () => { window.updateMasterLabel(); }, preConfirm:()=>{ return { namaLama: nm, nama: document.getElementById('mNama').value, uMain: document.getElementById('muMain').value, pMain: document.getElementById('mpMain').value, isi: document.getElementById('mIsi').value, uSub: document.getElementById('muSub').value, pSub: document.getElementById('mpSub').value, hasExpiry: document.getElementById('mExp').checked, user: activeUser.username } } 
+            confirmButtonColor:'#9A1622', showCancelButton:true, didOpen: () => { window.updateMasterLabel(); }, preConfirm:()=>{ return { namaLama: nm, nama: document.getElementById('mNama').value, uMain: document.getElementById('muMain').value, pMain: document.getElementById('mpMain').value, isi: document.getElementById('mIsi').value, uSub: document.getElementById('muSub').value, pSub: document.getElementById('mpSub').value, hasExpiry: document.getElementById('mExp').checked, user: activeUser.username } } 
         }).then(r=>{ if(r.isConfirmed) { document.getElementById('loading').style.display='flex'; fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: "saveMasterBarang", data: r.value }) }).then(()=>fetchData()).finally(()=>document.getElementById('loading').style.display='none'); } }); 
     }
     window.updateMasterLabel = function() { let val = document.getElementById('muMain').value || "Besar"; document.getElementById('lbl-big').innerText = val; }
@@ -823,7 +849,7 @@
 
     function renderPO() { let poMap = {}; activePO = {}; let grandTotal = 0; let outFilter = document.getElementById('outlet').value; let filteredStock = (outFilter === "ALL") ? globalData.liveStock : globalData.liveStock.filter(x => x.outlet === outFilter); filteredStock.forEach(x => { if(x.poNeed > 0) { if(!poMap[x.name]) poMap[x.name] = { name: x.name, uMain: x.uMain, pMain: x.pMain, qty: 0 }; poMap[x.name].qty += x.poNeed; } }); let h = ''; for(let key in poMap) { let item = poMap[key]; activePO[item.name] = { qty: item.qty, price: item.pMain, uMain: item.uMain }; let sub = item.qty * item.pMain; grandTotal += sub; h += `<div class="d-flex justify-content-between align-items-center border-bottom py-2"><div style="width:50%"><div class="fw-bold small" style="color:var(--text)">${item.name}</div><div class="text-muted" style="font-size:0.6rem;">${toIDR(item.pMain)} / ${item.uMain}</div></div><div><input type="number" class="po-input" value="${item.qty}" onchange="updatePO('${item.name}', this.value)"></div><div class="text-end fw-bold text-success" style="font-size:0.8rem; width:30%;" id="po_sub_${item.name.replace(/[^a-zA-Z0-9]/g, '')}">${toIDR(sub)}</div></div>`; } document.getElementById('poList').innerHTML = h || `<div class="text-muted text-center small py-3">Tidak ada rekomendasi order. Stok aman.</div>`; document.getElementById('poGrandTotal').innerText = toIDR(grandTotal); }
     window.updatePO = function(name, newQty) { let qty = Number(newQty) || 0; activePO[name].qty = qty; let sub = qty * activePO[name].price; document.getElementById('po_sub_'+name.replace(/[^a-zA-Z0-9]/g, '')).innerText = toIDR(sub); let grand = 0; for(let k in activePO) grand += activePO[k].qty * activePO[k].price; document.getElementById('poGrandTotal').innerText = toIDR(grand); }
-    window.copyPOWA = function() { let out = document.getElementById('outlet').value; let txt = `🛒 *FORM PURCHASE ORDER (PO) AI-CHA*\n🏢 Target: ${out==='ALL'?'SELURUH OUTLET':out}\n📅 ${new Date().toLocaleDateString('id-ID')}\n\n*Rincian Order:*\n`; let hasPO = false; let gTot = 0; for(let k in activePO) { if(activePO[k].qty > 0) { let sub = activePO[k].qty * activePO[k].price; gTot += sub; txt += `➖ ${k} : *${activePO[k].qty} ${activePO[k].uMain}*\n`; hasPO = true; } } if(!hasPO) return Swal.fire({icon:'warning', title:'Order Kosong'}); txt += `\n💰 *Total Estimasi Tagihan: ${toIDR(gTot)}*\n\nMohon diproses, terima kasih.`; navigator.clipboard.writeText(txt).then(() => Swal.fire({toast:true, position:'top', icon:'success', title:'Format PO Tersalin!', showConfirmButton:false, timer:2000})); }
+    window.copyPOWA = function() { let out = document.getElementById('outlet').value; let txt = `🛒 *FORM PURCHASE ORDER (PO) MOMOYO*\n🏢 Target: ${out==='ALL'?'SELURUH OUTLET':out}\n📅 ${new Date().toLocaleDateString('id-ID')}\n\n*Rincian Order:*\n`; let hasPO = false; let gTot = 0; for(let k in activePO) { if(activePO[k].qty > 0) { let sub = activePO[k].qty * activePO[k].price; gTot += sub; txt += `➖ ${k} : *${activePO[k].qty} ${activePO[k].uMain}*\n`; hasPO = true; } } if(!hasPO) return Swal.fire({icon:'warning', title:'Order Kosong'}); txt += `\n💰 *Total Estimasi Tagihan: ${toIDR(gTot)}*\n\nMohon diproses, terima kasih.`; navigator.clipboard.writeText(txt).then(() => Swal.fire({toast:true, position:'top', icon:'success', title:'Format PO Tersalin!', showConfirmButton:false, timer:2000})); }
     function updTrfLbl() { let s=document.getElementById('trfItem').value; let out=document.getElementById('outlet').value; let i=globalData.liveStock.find(x=>x.name===s && x.outlet===out); if(i) { document.getElementById('trfMax').innerText=i.displayQty; document.getElementById('lbl-trf-1').innerText=`QTY (${i.uMain})`; document.getElementById('lbl-trf-2').innerText=`QTY (${i.uSub})`; } }
     async function processTransfer() { let d={ from: document.getElementById('outlet').value, to: document.getElementById('trfDest').value, item: document.getElementById('trfItem').value, q1: document.getElementById('trf-q1').value, q2: document.getElementById('trf-q2').value, user: activeUser.username }; if(!d.from||!d.to||!d.item||(!d.q1&&!d.q2)) return Swal.fire({icon:'error', title:'Lengkapi Data!'}); document.getElementById('loading').style.display='flex'; try { await fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: "processTransfer", data: d }) }); Swal.fire({toast:true, position:'top', icon:'success', title:'Transfer Sukses', showConfirmButton:false, timer:1500}); document.getElementById('trf-q1').value=''; document.getElementById('trf-q2').value=''; fetchData(); showStok(); } catch(e){} finally { document.getElementById('loading').style.display='none'; } }
   </script>
