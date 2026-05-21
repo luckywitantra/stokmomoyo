@@ -121,6 +121,10 @@
     @keyframes shimmer { 0% { background-position: -150px 0; } 100% { background-position: 100% 0; } }
     .skeleton-card { padding: 15px; background: var(--card-bg); border-radius: var(--radius); margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--border); }
     .sk-title { height: 20px; width: 70%; } .sk-big { height: 35px; width: 40%; }
+    
+    /* Animasi ringan untuk efek klik foto */
+    .zoomable-img { transition: transform 0.2s; cursor: pointer; }
+    .zoomable-img:active { transform: scale(0.9); }
   </style>
 </head>
 <body>
@@ -301,7 +305,6 @@
     
     const toIDR=(n)=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n);
 
-    // Diubah nama storage lokalnya agar identik dengan Momoyo (mencegah bentrok dengan app sebelumnya)
     localforage.config({ name:'MOMOYO_DB', storeName:'moy_store' });
 
     // --- PWA INSTALLATION LOGIC ---
@@ -326,7 +329,7 @@
                 imageUrl: APP_LOGO,
                 imageWidth: 80,
                 showCancelButton: true,
-                confirmButtonColor: '#9A1622', // Warna Maroon SweetAlert Momoyo
+                confirmButtonColor: '#9A1622',
                 cancelButtonColor: '#8D6E63',
                 confirmButtonText: 'Instal Sekarang',
                 cancelButtonText: 'Nanti Saja'
@@ -473,8 +476,27 @@
         let max = Math.max(...arr) || 1; let min = Math.min(...arr); let range = max - min || 1;
         let w = 60; let h = 20; let step = w / (arr.length - 1);
         let pts = arr.map((val, i) => `${i * step},${h - (((val - min) / range) * (h-4)) - 2}`);
-        // Warna maroon line chart
         return `<svg width="${w}" height="${h}" style="overflow:visible;"><polyline points="${pts.join(' ')}" fill="none" stroke="#9A1622" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    }
+
+    // ==========================================
+    // FUNGSI ZOOM FOTO PRODUK (LIGHTBOX)
+    // ==========================================
+    window.zoomFoto = function(event, url, nama) {
+        event.stopPropagation(); // Mencegah klik menyebar ke kartu (agar detail modal tidak terbuka)
+        Swal.fire({
+            title: `<div class="fs-6 text-white text-center mt-2">${nama}</div>`,
+            imageUrl: url,
+            imageAlt: nama,
+            background: 'transparent',
+            backdrop: 'rgba(0,0,0,0.85)',
+            showConfirmButton: false,
+            showCloseButton: true,
+            padding: '1em',
+            customClass: {
+                closeButton: 'text-white'
+            }
+        });
     }
 
     function renderStockList() {
@@ -520,8 +542,8 @@
         
         let sparkline = isCompactView ? '' : generateSparkline(lItem?.history, p.isi);
         
-        // MENAMPILKAN THUMBNAIL FOTO PRODUK
-        let fotoUrl = p.fotoUrl || "https://cdn-icons-png.flaticon.com/512/1170/1170577.png"; // Placeholder bawaan
+        // FOTO DIBERIKAN FUNGSI ONCLICK ZOOM
+        let fotoUrl = p.fotoUrl || "https://cdn-icons-png.flaticon.com/512/1170/1170577.png";
 
         rowsHTML.push(`
         <div class="swipe-container ${isCompactView ? 'compact-mode' : ''}">
@@ -531,7 +553,7 @@
                 <button class="history-btn hide-compact" onclick="event.stopPropagation(); showHistory('${p.name}')"><i class="bi bi-clock-history"></i></button>
                 
                 <div class="d-flex align-items-center gap-3 mb-2">
-                    <img src="${fotoUrl}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border);" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1170/1170577.png'">
+                    <img src="${fotoUrl}" onclick="zoomFoto(event, '${fotoUrl}', '${p.name}')" class="zoomable-img" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); background:white;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1170/1170577.png'">
                     
                     <div class="flex-grow-1">
                         <div class="d-flex justify-content-between align-items-center mb-1">
@@ -663,7 +685,8 @@
         let out = document.getElementById('outlet').value; let p = globalData.products.find(x => x.name === itemName); let lItem = globalData.liveStock.find(x => x.name === itemName && x.outlet === out);
         let chartHtml = `<canvas id="detailChart" height="150"></canvas>`; let expHtml = "";
         
-        let fotoHtml = p.fotoUrl ? `<div class="text-center mb-3"><img src="${p.fotoUrl}" style="max-height: 150px; border-radius: 8px; border: 1px solid var(--border);"></div>` : '';
+        // FOTO DETAIL BISA DI KLIK UNTUK ZOOM
+        let fotoHtml = p.fotoUrl ? `<div class="text-center mb-3"><img src="${p.fotoUrl}" onclick="zoomFoto(event, '${p.fotoUrl}', '${p.name}')" class="zoomable-img" style="max-height: 150px; border-radius: 8px; border: 1px solid var(--border);"></div>` : '';
 
         if(lItem && lItem.batches && lItem.batches.length > 0) {
             lItem.batches.forEach(b => {
@@ -860,7 +883,8 @@
     function renderMasterList() { 
         let h=''; 
         globalData.products.forEach(b => { 
-            let fotoHtml = b.fotoUrl ? `<img src="${b.fotoUrl}" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border);" onerror="this.style.display='none'">` : '';
+            // FOTO LIST MASTER BISA DI KLIK UNTUK ZOOM
+            let fotoHtml = b.fotoUrl ? `<img src="${b.fotoUrl}" onclick="zoomFoto(event, '${b.fotoUrl}', '${b.name}')" class="zoomable-img" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border);" onerror="this.style.display='none'">` : '';
             h+=`<div class="card-box p-3">
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center gap-3">
@@ -881,7 +905,7 @@
     }
     window.deleteMasterItem = function(nama) { Swal.fire({ title: 'Hapus Item?', text: `Anda yakin ingin menghapus ${nama}?`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#9A1622' }).then(r => { if(r.isConfirmed) { showSkeletonLoader(); fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: "deleteMasterBarang", data: { nama: nama, user: activeUser.username } }) }).then(()=>fetchData()); } }); }
     
-    // --- MODIFIKASI MODAL MASTER BARANG UNTUK UPLOAD FOTO ---
+    // --- MODIFIKASI MODAL MASTER BARANG UNTUK UPLOAD FOTO (Bisa dari Galeri) ---
     window.openMasterModal = function(nm="", uM="", pM="", isi="", uS="", pS="", hasExp=true, fUrl="") { 
         let chk = hasExp ? "checked" : ""; 
         let fotoPreview = fUrl ? `<img id="mFotoPreview" src="${fUrl}" style="max-height: 120px; border-radius: 8px; display: block; margin: 0 auto;">` : `<img id="mFotoPreview" src="" style="max-height: 120px; border-radius: 8px; display: none; margin: 0 auto;">`;
@@ -910,10 +934,10 @@
                         <label class="form-check-label fw-bold small" style="color:var(--text)" for="mExp">Barang Memiliki Kadaluwarsa</label>
                     </div>
 
-                    <!-- INPUT FOTO PRODUK -->
+                    <!-- INPUT FOTO PRODUK (Tanpa capture="environment" agar bisa dari galeri) -->
                     <div class="mt-3 p-2 rounded border text-center" style="background:var(--input-bg)">
-                        <label class="inp-lbl text-start"><i class="bi bi-camera-fill me-1"></i> Foto Produk (Opsional)</label>
-                        <input type="file" id="mFoto" accept="image/*" capture="environment" class="inp-field mb-2" style="font-size:0.8rem; padding:8px;" onchange="previewDanKompresFoto(event)">
+                        <label class="inp-lbl text-start"><i class="bi bi-images me-1"></i> Foto Produk (Dari Kamera/Galeri)</label>
+                        <input type="file" id="mFoto" accept="image/*" class="inp-field mb-2" style="font-size:0.8rem; padding:8px;" onchange="previewDanKompresFoto(event)">
                         <input type="hidden" id="mFotoBase64">
                         ${fotoPreview}
                     </div>
@@ -937,7 +961,7 @@
             } 
         }).then(r=>{ 
             if(r.isConfirmed) { 
-                Swal.fire({ title: 'Menyimpan...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } }); // Loading spinner tambahan
+                Swal.fire({ title: 'Menyimpan...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } }); 
                 fetch(GAS_API_URL, { method: "POST", body: JSON.stringify({ action: "saveMasterBarang", data: r.value }) })
                 .then(()=> { Swal.close(); fetchData(); })
                 .catch(() => { Swal.fire('Error', 'Gagal menyimpan', 'error'); }); 
@@ -958,7 +982,6 @@
             let img = new Image();
             img.src = e.target.result;
             img.onload = function() {
-                // Atur maksimal lebar/tinggi foto agar ukurannya tidak membebani limit GAS
                 let MAX_WIDTH = 600;
                 let MAX_HEIGHT = 600;
                 let width = img.width;
@@ -970,7 +993,6 @@
                     if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
                 }
 
-                // Gambar ulang di Canvas untuk kompresi
                 let canvas = document.createElement('canvas');
                 canvas.width = width;
                 canvas.height = height;
